@@ -1,0 +1,16 @@
+Estats inicials:
+0
+Estats finals:
+2 3
+Transicions:
+0 a 1
+1 c 2
+2 b 2
+2 c 2
+2 a 3
+3 a 3
+3 b 4
+3 c 2
+4 a 3
+4 b 2
+4 c 2
