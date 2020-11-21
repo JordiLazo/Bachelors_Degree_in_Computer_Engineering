@@ -1,0 +1,1 @@
+ls -1 *.txt | awk '{print "mv "$1" "$1".nou"}' | bash

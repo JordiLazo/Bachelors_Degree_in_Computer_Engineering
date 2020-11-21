@@ -1,0 +1,4 @@
+ls -la | awk 'BEGIN{print "Inici processament"}
+/^d/ {print "Directori " $9}
+/^-/&& $3=="francesc" {print "fitxer Francesc: "$9}
+END{print "Fi processament"}'

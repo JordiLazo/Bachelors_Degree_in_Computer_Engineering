@@ -1,0 +1,6 @@
+#!/bin/bash
+ls -l | awk 'BEGIN{print "comencem..."; total=0}
+{total=total+$5}
+END{mitja=total/NR; print "quantitat total: " total; print "mitja:" mitja;
+print "programa executat..."}'
+exit 0

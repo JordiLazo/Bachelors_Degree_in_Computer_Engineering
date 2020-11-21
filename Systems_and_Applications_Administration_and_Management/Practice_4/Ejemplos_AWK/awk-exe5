@@ -1,0 +1,5 @@
+#!/bin/bash
+proces=$1
+ps -ef |\
+awk '$1~/'$USER'/ && $8~/'$proces'/ && $8!~/awk/ {print $2}' |\
+xargs kill -9
