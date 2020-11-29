@@ -1,0 +1,61 @@
+#Identificador;Nombre;Posición;Coste;Equipo;Puntuación
+109;Ter Stegen;Portero;31;BAR;14
+105;Oblak;Portero;27;ATM;9
+133;Pichu Cuéllar;Portero;25;LEG;5
+141;Keylor Navas;Portero;25;RMA;8
+103;Kepa Arrizabalaga;Portero;24;ATH;2
+146;Sergio Rico;Portero;17;SEV;6
+143;Rulli;Portero;15;RSO;2
+148;Neto;Portero;15;VAL;2
+325;Marcelo;Defensa;34;RMA;3
+232;Piqué;Defensa;25;BAR;6
+327;Sergio Ramos;Defensa;24;RMA;14
+324;Carvajal;Defensa;23;RMA;7
+219;Filipe Luis;Defensa;21;ATM;2
+233;Umtiti;Defensa;21;BAR;3
+336;Odriozola;Defensa;17;RSO;3
+231;Nélson Semedo;Defensa;16;BAR;6
+256;Sidnei;Defensa;16;DEP;3
+263;Ramis;Defensa;15;EIB;3
+288;Pedro Alcalá;Defensa;15;GIR;2
+524;Koke;Medio;35;ATM;13
+644;Kroos;Medio;33;RMA;12
+521;Carrasco;Medio;30;ATM;6
+568;Pedro León;Medio;30;EIB;3
+648;Modric;Medio;30;RMA;18
+611;Vitolo;Medio;27;LPA;12
+655;Mikel Oyarzabal;Medio;27;RSO;2
+529;Busquets;Medio;26;BAR;8
+535;Rakitic;Medio;25;BAR;16
+517;Raúl García;Medio;24;ATH;16
+606;Jonathan Viera;Medio;24;LPA;5
+646;Marco Asensio;Medio;24;RMA;16
+642;Isco;Medio;22;RMA;20
+532;Iniesta;Medio;20;BAR;0
+511;Beñat;Medio;17;ATH;4
+641;Ceballos;Medio;17;RMA;5
+678;Parejo;Medio;17;VAL;7
+516;Muniain;Medio;16;ATH;5
+652;Illarramendi;Medio;16;RSO;7
+674;Kondogbia;Medio;16;VAL;3
+680;Bruno Soriano;Medio;16;VIL;6
+541;Guardado;Medio;15;BET;7
+662;Ganso;Medio;15;SEV;2
+673;Guedes;Medio;15;VAL;2
+819;Messi;Delantero;86;BAR;20
+876;Cristiano Ronaldo;Delantero;68;RMA;24
+818;Luis Suárez;Delantero;60;BAR;8
+873;Bale;Delantero;60;RMA;12
+814;Griezmann;Delantero;55;ATM;10
+828;Iago Aspas;Delantero;41;CEL;11
+816;Dembélé;Delantero;32;BAR;2
+881;Willian José;Delantero;29;RSO;6
+807;Aduriz;Delantero;26;ATH;7
+874;Benzema;Delantero;26;RMA;14
+842;Leo Baptistao;Delantero;24;ESP;7
+833;Lucas Pérez;Delantero;22;DEP;16
+880;Juanmi;Delantero;22;RSO;3
+832;Florin;Delantero;20;DEP;3
+879;Carlos Vela;Delantero;20;RSO;22
+808;Iñaki Williams;Delantero;19;ATH;3
+884;Muriel;Delantero;16;SEV;2
