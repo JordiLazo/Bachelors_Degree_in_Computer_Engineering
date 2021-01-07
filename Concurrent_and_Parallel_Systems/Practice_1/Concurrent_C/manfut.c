@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
 		LlegirFitxerJugadors(argv[2]);
 
 	numOfThreads = atoi(argv[3]);
+	if (numOfThreads <= 0)
+		error("Invalid number of Threads");
 
 	// Calculate the best team.
 	CalcularEquipOptim(PresupostFitxatges, &MillorEquip, numOfThreads);
@@ -209,7 +211,8 @@ void CalcularEquipOptim(long int PresupostFitxatges, PtrJugadorsEquip MillorEqui
 		args[i]->first = prevThreadEnd;	
 		args[i]->end = threadEnd;		
 		args[i]->PresupostFitxatges = PresupostFitxatges;		
-		pthread_create(&TArray[i], NULL, (void *)evaluateThreadFunc, (void *)args[i]);
+		if (pthread_create(&TArray[i], NULL, (void *)evaluateThreadFunc, (void *)args[i]) != 0)
+			error("Error on creating pthread");
 		remaining -= pivot;		
 	}
 
@@ -230,9 +233,7 @@ void CalcularEquipOptim(long int PresupostFitxatges, PtrJugadorsEquip MillorEqui
 			max = PuntuacioEquip(*MillorEquip);
 		}
 	}		
-
 	free(retV);
-	free(args);
 }
 
 
@@ -260,8 +261,8 @@ TJugadorsEquip* evaluateThreadFunc(void* arguments)
 		// Reject teams with repeated players.
 		if (JugadorsRepetits(jugadors))
 		{
-			sprintf(cad,"%s Invalid.\r%s", color_red, end_color);
-			write(1,cad,strlen(cad));
+			//sprintf(cad,"%s Invalid.\r%s", color_red, end_color);
+			//write(1,cad,strlen(cad));
 			continue;	// Equip no valid.
 		}
 		
