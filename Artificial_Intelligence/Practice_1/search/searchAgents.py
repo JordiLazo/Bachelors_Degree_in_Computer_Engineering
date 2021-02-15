@@ -493,16 +493,43 @@ def foodHeuristic(state, problem):
     problem.heuristicInfo['wallCount']
     """
 
-    "*** YOUR CODE HERE ***"
     position, foodGrid = state
-    heuristic = 0
-    if len(foodGrid.asList()) == 0:
-        return 0
-    for food in foodGrid.asList():
-        distance = mazeDistance(position, food, problem.startingGameState)
+    foodGrid = foodGrid.asList()
 
+    if len(foodGrid) == 0:
+        return 0
+    distances = problem.heuristicInfo.setdefault('saved_heuristics', {})
+    distances.setdefault(position, [])
+    heuristic = 0
+    for food in foodGrid:
+        found_distance = find_distance(food,distances[position])
+        if found_distance is None:
+            distance = mazeDistance(position, food, problem.startingGameState)
+            distances[position].append((food, distance))
+        else:
+            distance = found_distance
         heuristic = distance if distance > heuristic else heuristic
     return heuristic
+
+
+def find_distance(food_pos, array_of_distances):
+    # imagine exist food_pos in array_of_distances
+    # to simplify idea imagine food_pos coordinates in array are a number (distances are not affected)
+    # examples: food1 = (3,4) --> 24, food2 = (0,4) --> 7, ...
+    #
+    # 'lambda function' replaces found food_pos (parameter) by its distance and replaces the rest with None
+    # let's try to find food_pos=7
+    #
+    # a_o_d = [ (24,8),(7,29),(3,0)]
+    # after lambda [ None, 29, None]
+    #
+    # return: 'next function' finds the unique value not None, but if all are None
+    # returns None as default value
+    #  ex1 --> [None,29,None]-return->29
+    #  ex2 --> [None,None,None]-return->None
+
+    distances = list(map(lambda (food,dst): dst if food == food_pos else None, array_of_distances))
+    return next((d for d in distances if d is not None), None)
 
 
 class ClosestDotSearchAgent(SearchAgent):
@@ -592,3 +619,4 @@ def mazeDistance(point1, point2, gameState):
     assert not walls[x2][y2], 'point2 is a wall: ' + str(point2)
     prob = PositionSearchProblem(gameState, start=point1, goal=point2, warn=False, visualize=False)
     return len(search.bfs(prob))
+
