@@ -1,0 +1,150 @@
+; ---------------------------------------------------------------
+; Nom alumne : Jordi Rafael Lazo Florensa
+; Grup: GM2
+; Sessió: PR-AVA2 Divendres 24 de maig
+; ---------------------------------------------------------------
+
+TECLAT EQU 0A000h
+PANTALLA EQU 0B000h
+ORIGEN 400h
+
+INICIO ini
+.DATOS
+	kaLoE VALOR 1B6Bh, 1461h, 1C4Ch, 126Fh, 0C45h 	 			;introduim el array "kaLoE"
+	CODI VALOR 0343h, 034Fh, 0344h, 0349h			 			;introduim el array "CODI"
+	Entrada_usuari VALOR 0000h, 0000h, 0000h, 0000h, 0000h		;inicialitzem el array que emmagatzemará les lletres escrites al teclat per l'usuari
+	OK VALOR 104Fh, 104Bh										;introduim la paraula que verificara si es correcte "OK"
+	ER VALOR 2045h, 2052h										;introduim la paraula que verificara si es incorrecte "ER"
+
+.CODIGO
+ini:
+
+;----------ESBORREM EL BUFFER DEL TECLAT----------
+	MOVH R0, BYTEALTO TECLAT								;adreça associada al registre de dades del teclat
+	MOVL R0, BYTEBAJO TECLAT
+	
+	INC R0
+	
+	MOVH R1, 00h
+	MOVL R1, 00000100b										;esborrem el buffer del teclat activant el bit 2
+	
+	MOV [R0],R1
+;----------ESBORREM EL CONTINGUT DE LA PANTALLA----------
+	MOVH R0, BYTEALTO PANTALLA
+	MOVL R0, BYTEBAJO PANTALLA								;adreça associada al registre de dades del primer pixel de la pantalla
+
+	MOVH R1,00h												;esborrem el contingut de la pantalla
+	MOVL R1,00000011b
+	
+	MOV [R0],R1
+;----------ESCRIBIM LA PARAULA "CODI" EN LA PANTALLA----------
+	MOVH R0, BYTEALTO PANTALLA								;adreça associada al registre de dades del primer pixel de la pantalla
+	MOVL R0, BYTEBAJO PANTALLA 
+	
+	MOVH R1,00h												;posicio des de on volem começar a escriure en pantalla
+	MOVL R1,46												
+	
+	ADD R0, R0, R1											;sumen a R0(que es el primer pixel de la pantalla) la posicio de R1(46) per començar a escriure
+	
+	MOVH R2,00h 											;la paraula codi conté 4 lletres per tant
+	MOVL R2,04h												;repetirem el bucle 4 vegades per imprimir la paraula
+	
+	MOVH R3, BYTEALTO DIRECCION CODI						;adreça associada al registre de dades de la paraula CODI
+	MOVL R3, BYTEBAJO DIRECCION CODI
+
+	imprimir_CODI:
+		MOV R1,[R3]											;movem el contingut de R3 (que es la paraula CODI) a R1 (posició en pantalla)
+		MOV [R0], R1										;imprimim
+		
+		INC R0												;incrementen i decrementem els iteradors corresponents per poder moure les adreces
+		INC R3												;per a poder seguir imprimint correctament
+		DEC R2
+		BRNZ imprimir_CODI
+;----------ESCRIBIM PER PANTALLA ELS CARACTERS INTRODUITS PER L'USUARI----------
+	INC R0													;incrementem en 1 la posició R0(pantalla) ja que hem de saltar 1 espai
+															;per a començar a imprimir les paraules escrites per l'usuari
+	MOVH R5, BYTEALTO TECLAT
+	MOVL R5, BYTEBAJO TECLAT
+	
+	MOVH R3, BYTEALTO DIRECCION Entrada_usuari				;adreça associada a les paraules introduides per l'usuari
+	MOVL R3, BYTEBAJO DIRECCION Entrada_usuari
+	
+	MOV R6,R5												;R6 adreça associada al registre de control de teclat
+	INC R6													
+	
+	MOVH R4, 01h											;màscara per comprovar tecla en buffer 
+	MOVL R4, 00h
+	
+	MOVH R2,00h 											;iterador del bucle(l'usuari introduirà com a màxim 5 paraules)
+	MOVL R2,05h
+
+	tecla_premuda:
+		MOV R1, [R6]										;consultem el teclat accedint a R6 que conté l’adreça
+															;associada al registre de control del teclat 
+		MOVL R1,00h
+		
+		COMP R1,R4											;comprobem si hi ha una "tecla_premuda"
+		BRNZ tecla_premuda
+		
+		MOV R1, [R5]										;guardem a R1 la "tecla_premuda" el contingut del teclat R5
+		MOV [R3],R1											;consultem el teclat accedint a l'adreça R1
+		MOVH R1,00101000b									;color de fons (negre) + color de text (groc)
+		
+		MOV [R0], R1										;carregem lletra i color al píxel corresponent			
+		
+		INC R0
+		INC R3												;incrementem i decrementem els iteradors corresponents per a seguir imprimint
+		DEC R2
+		BRNZ tecla_premuda
+;----------COMPAREM ELS CARACTERS INTRODUITS PER L'USUARI AMB "kaLoE"----------
+	MOVH R0, BYTEALTO DIRECCION Entrada_usuari				;adreça associada als caracters introduits per l'usuari
+	MOVL R0, BYTEBAJO DIRECCION Entrada_usuari
+	
+	MOVH R2, BYTEALTO DIRECCION kaLoE						;adreça associada a la paraula "kaLoE"
+	MOVL R2, BYTEBAJO DIRECCION kaLoE
+	
+	MOVH R4, 00h											;iterador del bucle de comparació (màxim 5 caracters)
+	MOVL R4, 05h
+	
+		comparar_caracters:
+			MOV R1, [R0]									;movem el contingut de R0(Entrada_usuari) a R1
+			MOV R3, [R2]									;movem el contingut de R2("kaLoE") a R2
+			
+			INC R0											;incrementem les adreces per a comparar els seguents caracters
+			INC R2
+			
+			COMP R1, R3										;comparem R1(tecla_premuda) amb R3 ("kaLoE") 
+			BRNZ incorrecte									;saltem al missatge incorrecte en el moment que un caracter ja no es = que l'altre
+			
+			DEC R4											;decrementem R4 (iterador) i seguim comparant els caracters posteriors
+			BRNZ comparar_caracters
+;----------COMPARACIÓ CORRECTA----------
+	MOVH R0, BYTEALTO DIRECCION OK							;si la comparació es correcta R0 tindrá la adreça de OK
+	MOVL R0, BYTEBAJO DIRECCION OK
+	
+	JMP posicio_final
+;----------COMPARACIÓ INCORRECTA----------
+	incorrecte:
+	MOVH R0, BYTEALTO DIRECCION ER							;si la comparació es incorrecta R0 tindrá la adreça de ER
+	MOVL R0, BYTEBAJO DIRECCION ER
+;----------ESCRIBIM PER PANTALLA EL RESULTAT DE LA COMPROBACIÓ----------
+	posicio_final:
+		MOVH R1, BYTEALTO PANTALLA							;adreça associada a la pantalla
+		MOVL R1, BYTEBAJO PANTALLA
+		
+		MOVH R2, 00h										;posicio de la pantalla(pixel) on escriurem el resultat de la comparació
+		MOVL R2, 107
+		
+		ADD R1, R1, R2										;sumem a la pantalla la posició de R2
+		
+		MOVH R3, 00h										;iterador del bucle per a imprimir el resultat
+		MOVL R3, 02h
+	imprimir_resultat:
+		MOV R4, [R0]										;movem el contingut de R0 (que es resultat OK o ER en funció del resultat) a R4 (posició en pantalla)
+		MOV [R1], R4										;imprimim per pantalla el caracter de R4
+		
+		INC R1
+		INC R0												;incrementem i decrementem els iteradors corresponents per poder imprimir tot el missatge sencer
+		DEC R3
+		BRNZ imprimir_resultat
+FIN
